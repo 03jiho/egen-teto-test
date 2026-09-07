@@ -408,7 +408,7 @@
         <p class="stat-title">답변 성향 분포</p>
         <div class="bonus-row" id="bonusRow">
           <span class="bonus-icon">✨</span>
-          <span id="bonusText">찡찡보스 (전 문항 에겐 선택 시 등장)</span>
+          <span id="bonusText">전 문항 에겐 선택 시 히든 결과 등장</span>
         </div>
         <div class="stat-row">
           <span class="stat-label">에겐</span>
@@ -520,7 +520,7 @@
     },
     transcend:{
       color:"var(--egen)", stamp:"측정과부하",
-      title:"찡찡보스", subtitle:"감성은 최강, 근데 옆사람은 좀 피곤함",
+      title:"찡찡거리는 예민보스", subtitle:"감성은 최강, 근데 옆사람은 좀 피곤함",
       desc:"말 한마디에 삐지고, 삐졌다고 카톡 씹고, 씹었다고 또 서운해합니다. 본인은 다정한 거라고 생각하지만 주변은 이미 눈치게임 중입니다. 축하합니다, 인류 최초의 감성 갑질러입니다."
     }
   };
@@ -612,10 +612,10 @@
     const bonusText = document.getElementById('bonusText');
     if (r.key === 'transcend'){
       bonusRow.classList.add('achieved');
-      bonusText.textContent = '찡찡보스 달성! 전 문항 에겐 선택';
+      bonusText.textContent = '히든 결과 달성: ' + info.title;
     } else {
       bonusRow.classList.remove('achieved');
-      bonusText.textContent = '찡찡보스 (전 문항 에겐 선택 시 등장)';
+      bonusText.textContent = '전 문항 에겐 선택 시 히든 결과 등장';
     }
 
     const shareUrl = window.location.origin + window.location.pathname + '?a=' + encodeAnswers(answers);
