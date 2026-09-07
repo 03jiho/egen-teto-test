@@ -112,6 +112,20 @@
     margin:2px 0 0;
     text-wrap:balance;
   }
+  .masthead-share{
+    font-family:'Gowun Dodum','Noto Sans KR',sans-serif;
+    font-size:13px;
+    color:var(--ink-soft);
+    background:transparent;
+    border:1.5px solid var(--line);
+    border-radius:999px;
+    padding:6px 16px;
+    margin-top:4px;
+    cursor:pointer;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .masthead-share:hover{ border-color:var(--accent); color:var(--ink); }
+  .masthead-share:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; }
   .card{
     width:100%;
     max-width:560px;
@@ -361,6 +375,7 @@
 <div class="page">
   <header class="masthead">
     <h1 class="title">에겐테토 테스트</h1>
+    <button class="masthead-share" id="mastheadShareBtn" type="button">테스트 공유하기</button>
   </header>
 
   <main class="card" id="card">
@@ -658,22 +673,29 @@
     setTimeout(function(){ btn.textContent = original; btn.disabled = false; }, 1500);
   }
 
-  function copyShareLink(){
-    const input = document.getElementById('shareLink');
-    input.select();
-    input.setSelectionRange(0, 99999);
-    if (navigator.clipboard && navigator.clipboard.writeText){
-      return navigator.clipboard.writeText(input.value).catch(function(){
-        try { document.execCommand('copy'); } catch(e){}
-      });
-    }
+  function legacyCopy(text){
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, 99999);
     try { document.execCommand('copy'); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  function copyText(text){
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      return navigator.clipboard.writeText(text).catch(function(){ legacyCopy(text); });
+    }
+    legacyCopy(text);
     return Promise.resolve();
   }
 
   document.getElementById('copyBtn').addEventListener('click', function(){
     const btn = this;
-    copyShareLink().then(function(){ flashButton(btn, '복사됨!'); });
+    copyText(document.getElementById('shareLink').value).then(function(){ flashButton(btn, '복사됨!'); });
   });
 
   document.getElementById('shareBtn').addEventListener('click', function(){
@@ -683,10 +705,23 @@
     if (navigator.share){
       navigator.share({ title: '에겐테토 테스트 결과: ' + title, text: '내 결과는 "' + title + '"! 너도 해봐', url: url }).catch(function(err){
         if (err && err.name === 'AbortError') return;
-        copyShareLink().then(function(){ flashButton(btn, '링크 복사됨!'); });
+        copyText(url).then(function(){ flashButton(btn, '링크 복사됨!'); });
       });
     } else {
-      copyShareLink().then(function(){ flashButton(btn, '링크 복사됨!'); });
+      copyText(url).then(function(){ flashButton(btn, '링크 복사됨!'); });
+    }
+  });
+
+  document.getElementById('mastheadShareBtn').addEventListener('click', function(){
+    const btn = this;
+    const url = window.location.origin + window.location.pathname;
+    if (navigator.share){
+      navigator.share({ title: '에겐테토 테스트', text: '이 테스트 한번 해봐, 너는 무슨 유형일지 궁금하지 않아?', url: url }).catch(function(err){
+        if (err && err.name === 'AbortError') return;
+        copyText(url).then(function(){ flashButton(btn, '링크 복사됨!'); });
+      });
+    } else {
+      copyText(url).then(function(){ flashButton(btn, '링크 복사됨!'); });
     }
   });
 
