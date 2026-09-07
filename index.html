@@ -1,0 +1,703 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap">
+<title>에겐테토 테스트</title>
+<style>
+  :root{
+    --bg:#0C0C13;
+    --surface:#16151F;
+    --surface-2:#1E1D2A;
+    --ink:#EEEBF6;
+    --ink-soft:#8B899E;
+    --egen:#FF3D8E;
+    --egen-soft:#331025;
+    --teto:#33E1FF;
+    --teto-soft:#0F2A33;
+    --yaman:#B6FF3D;
+    --yaman-soft:#212B0E;
+    --neutral:#FFB84D;
+    --neutral-soft:#2C220F;
+    --accent:#FFD23D;
+    --accent-ink:#0C0C13;
+    --line:#2B2A3A;
+    --glow-1:rgba(255,61,142,0.16);
+    --glow-2:rgba(51,225,255,0.13);
+    --shadow:0 16px 34px rgba(0,0,0,0.55);
+    --shadow-sm:0 6px 16px rgba(0,0,0,0.45);
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#F4F4FA;
+      --surface:#FFFFFF;
+      --surface-2:#EAEAF3;
+      --ink:#17161F;
+      --ink-soft:#6B697C;
+      --egen:#D91266;
+      --egen-soft:#FCE1EC;
+      --teto:#0088AD;
+      --teto-soft:#DEF4FA;
+      --yaman:#5C7A12;
+      --yaman-soft:#E9F1D6;
+      --neutral:#B07726;
+      --neutral-soft:#F6ECDA;
+      --accent:#E08900;
+      --accent-ink:#17161F;
+      --line:#DEDEE8;
+      --glow-1:rgba(217,18,102,0.06);
+      --glow-2:rgba(0,136,173,0.06);
+      --shadow:0 12px 28px rgba(23,22,31,0.10);
+      --shadow-sm:0 4px 12px rgba(23,22,31,0.07);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#F4F4FA;
+    --surface:#FFFFFF;
+    --surface-2:#EAEAF3;
+    --ink:#17161F;
+    --ink-soft:#6B697C;
+    --egen:#D91266;
+    --egen-soft:#FCE1EC;
+    --teto:#0088AD;
+    --teto-soft:#DEF4FA;
+    --yaman:#5C7A12;
+    --yaman-soft:#E9F1D6;
+    --neutral:#B07726;
+    --neutral-soft:#F6ECDA;
+    --accent:#E08900;
+    --accent-ink:#17161F;
+    --line:#DEDEE8;
+    --glow-1:rgba(217,18,102,0.06);
+    --glow-2:rgba(0,136,173,0.06);
+    --shadow:0 12px 28px rgba(23,22,31,0.10);
+    --shadow-sm:0 4px 12px rgba(23,22,31,0.07);
+  }
+
+  *{ box-sizing:border-box; }
+  body{ background:var(--bg); }
+
+  .page{
+    min-height:100%;
+    background-color:var(--bg);
+    background-image:
+      radial-gradient(560px circle at 12% -8%, var(--glow-1), transparent 60%),
+      radial-gradient(560px circle at 88% 4%, var(--glow-2), transparent 60%);
+    color:var(--ink);
+    font-family:'Gowun Dodum','Noto Sans KR',sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:48px 20px 60px;
+    gap:26px;
+  }
+
+  .masthead{
+    max-width:640px;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:10px;
+  }
+  .eyebrow{
+    font-family:'Gowun Dodum','Noto Sans KR',sans-serif;
+    font-size:14px;
+    color:var(--ink-soft);
+    letter-spacing:.04em;
+  }
+  .title{
+    font-family:'Jua','Gowun Dodum',sans-serif;
+    font-weight:400;
+    font-size:clamp(30px,6.2vw,44px);
+    line-height:1.3;
+    letter-spacing:-.01em;
+    margin:2px 0 0;
+    text-wrap:balance;
+  }
+  .card{
+    width:100%;
+    max-width:560px;
+    background:var(--surface);
+    border:1.5px solid var(--line);
+    border-radius:24px;
+    padding:32px 28px 34px;
+    box-shadow:var(--shadow);
+  }
+
+  @media (max-width:480px){
+    .page{ padding:24px 10px 36px; gap:18px; }
+    .masthead{ gap:6px; }
+    .card{ padding:22px 16px 26px; border-radius:18px; }
+    .option-btn{ padding:13px 15px; }
+    .share-actions{ gap:8px; }
+    .share-btn, .copy-btn{ padding:12px 8px; font-size:14px; }
+  }
+
+  .progress-row{ display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+  .q-counter{
+    font-family:'Jua','Gowun Dodum',sans-serif;
+    font-size:14px;
+    color:var(--ink-soft);
+    white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+  .progress-track{
+    flex:1;
+    height:8px;
+    background:var(--surface-2);
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--accent);
+    width:0%;
+    transition:width .35s ease;
+  }
+
+  .category-tag{
+    display:inline-block;
+    font-family:'Gowun Dodum','Noto Sans KR',sans-serif;
+    font-size:13px;
+    letter-spacing:.03em;
+    color:var(--ink-soft);
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:4px 14px;
+    margin:0 0 16px;
+  }
+
+  .question{
+    font-family:'Jua','Gowun Dodum',sans-serif;
+    font-weight:400;
+    font-size:clamp(20px,4.2vw,25px);
+    line-height:1.5;
+    letter-spacing:-.005em;
+    margin:0 0 22px;
+    text-wrap:balance;
+  }
+
+  .options{ display:flex; flex-direction:column; gap:12px; }
+  .option-btn{
+    font-family:'Gowun Dodum','Noto Sans KR',sans-serif;
+    font-size:16px;
+    line-height:1.5;
+    text-align:left;
+    color:var(--ink);
+    background:var(--surface);
+    border:1.5px solid var(--line);
+    border-radius:16px;
+    padding:15px 18px;
+    cursor:pointer;
+    box-shadow:var(--shadow-sm);
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .option-btn:hover{
+    background:var(--surface-2);
+    border-color:var(--accent);
+    transform:translateY(-2px);
+    box-shadow:0 0 0 1px var(--accent), var(--shadow);
+  }
+  .option-btn:active{ transform:translateY(0); box-shadow:var(--shadow-sm); }
+  .option-btn:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; }
+
+  #quizView.fade, #resultView.fade{ animation:fadein .28s ease; }
+  @keyframes fadein{ from{ opacity:0; transform:translateY(6px);} to{ opacity:1; transform:translateY(0);} }
+  @media (prefers-reduced-motion: reduce){
+    #quizView.fade, #resultView.fade{ animation:none; }
+    .option-btn{ transition:none; }
+  }
+
+  .result-badge{
+    display:inline-block;
+    font-family:'Gowun Dodum','Noto Sans KR',sans-serif;
+    font-size:12.5px;
+    letter-spacing:.03em;
+    color:var(--result-color, var(--egen));
+    background:var(--surface-2);
+    border:1.5px solid var(--result-color, var(--egen));
+    border-radius:999px;
+    padding:4px 14px;
+    margin:0 0 12px;
+  }
+
+  .result-title{
+    font-family:'Jua','Gowun Dodum',sans-serif;
+    font-weight:400;
+    font-size:clamp(26px,5.2vw,34px);
+    line-height:1.4;
+    margin:0 0 6px;
+    color:var(--result-color, var(--ink));
+    text-wrap:balance;
+  }
+  .result-subtitle{
+    font-family:'Gowun Dodum','Noto Sans KR',sans-serif;
+    font-size:16px;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+  }
+  .result-desc{
+    font-size:16px;
+    line-height:1.75;
+    margin:0 0 24px;
+  }
+
+  .share-block{ margin:0 0 24px; }
+  .share-actions{ display:flex; gap:10px; margin-bottom:10px; }
+  .share-btn, .copy-btn{
+    font-family:'Jua','Gowun Dodum',sans-serif;
+    font-weight:400;
+    font-size:15px;
+    cursor:pointer;
+    border-radius:14px;
+    padding:12px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .share-btn{
+    flex:2;
+    color:var(--accent-ink);
+    background:var(--result-color, var(--accent));
+    border:none;
+    box-shadow:0 0 22px color-mix(in srgb, var(--result-color, var(--accent)) 45%, transparent), var(--shadow-sm);
+  }
+  .copy-btn{
+    flex:1;
+    color:var(--ink);
+    background:var(--surface-2);
+    border:1.5px solid var(--line);
+  }
+  .share-btn:hover, .copy-btn:hover{ transform:translateY(-2px); box-shadow:var(--shadow); }
+  .share-btn:active, .copy-btn:active{ transform:translateY(0); box-shadow:var(--shadow-sm); }
+  .share-btn:focus-visible, .copy-btn:focus-visible{ outline:3px solid var(--ink); outline-offset:2px; }
+  .share-link{
+    width:100%;
+    font-family:'Gowun Dodum','Noto Sans KR',sans-serif;
+    font-size:13px;
+    color:var(--ink-soft);
+    background:var(--surface-2);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    padding:10px 14px;
+  }
+
+  .stat-block{ margin:0 0 20px; }
+  .stat-title{
+    font-family:'Jua','Gowun Dodum',sans-serif;
+    font-weight:400;
+    font-size:14px;
+    color:var(--ink-soft);
+    margin:0 0 10px;
+  }
+  .bonus-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:1.5px dashed var(--line);
+    border-radius:999px;
+    padding:8px 14px;
+    margin:0 0 12px;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .bonus-row.achieved{
+    border-style:solid;
+    border-color:var(--egen);
+    background:var(--egen-soft);
+    color:var(--egen);
+    font-weight:700;
+  }
+  .bonus-icon{ flex:none; }
+  .stat-row{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .stat-label{ width:60px; flex:none; font-size:14px; font-weight:700; white-space:nowrap; }
+  .stat-track{ flex:1; height:14px; background:var(--surface-2); border-radius:999px; overflow:hidden; }
+  .stat-fill{ height:100%; border-radius:999px; }
+  .stat-fill.e{ background:var(--egen); }
+  .stat-fill.t{ background:var(--teto); }
+  .stat-fill.y{ background:var(--yaman); }
+  .stat-fill.b{ background:var(--neutral); }
+  .stat-count{ width:22px; flex:none; text-align:right; font-variant-numeric:tabular-nums; font-size:14px; }
+
+  details.recap{
+    border:1.5px dashed var(--line);
+    border-radius:14px;
+    padding:12px 16px;
+    margin:0 0 22px;
+  }
+  details.recap summary{
+    cursor:pointer;
+    font-family:'Gowun Dodum','Noto Sans KR',sans-serif;
+    font-size:14.5px;
+    color:var(--ink-soft);
+  }
+  .recap-list{ list-style:none; margin:12px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .recap-list li{ font-size:14px; display:flex; gap:8px; line-height:1.5; }
+  .recap-dot{ flex:none; width:10px; height:10px; border-radius:50%; margin-top:6px; }
+  .recap-dot.e{ background:var(--egen); }
+  .recap-dot.t{ background:var(--teto); }
+  .recap-dot.y{ background:var(--yaman); }
+  .recap-dot.b{ background:var(--neutral); }
+  .recap-q{ color:var(--ink-soft); }
+
+  .retry-btn{
+    font-family:'Jua','Gowun Dodum',sans-serif;
+    font-weight:400;
+    font-size:17px;
+    width:100%;
+    color:var(--accent-ink);
+    background:var(--accent);
+    border:none;
+    border-radius:16px;
+    padding:15px;
+    cursor:pointer;
+    box-shadow:0 0 20px color-mix(in srgb, var(--accent) 40%, transparent), var(--shadow-sm);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .retry-btn:hover{ transform:translateY(-2px); box-shadow:0 0 26px color-mix(in srgb, var(--accent) 55%, transparent), var(--shadow); }
+  .retry-btn:active{ transform:translateY(0); box-shadow:var(--shadow-sm); }
+  .retry-btn:focus-visible{ outline:3px solid var(--ink); outline-offset:2px; }
+
+  [hidden]{ display:none !important; }
+</style>
+
+<div class="page">
+  <header class="masthead">
+    <h1 class="title">에겐테토 테스트</h1>
+  </header>
+
+  <main class="card" id="card">
+    <div id="quizView">
+      <div class="progress-row">
+        <span class="q-counter" id="qCounter">Q1 / 8</span>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <p class="category-tag" id="categoryTag">식사</p>
+      <h2 class="question" id="questionText">질문을 불러오는 중...</h2>
+      <div class="options" id="optionsList"></div>
+    </div>
+
+    <div id="resultView" hidden>
+      <p class="eyebrow" style="text-align:left;margin:0 0 8px;">당신의 판정 결과는</p>
+      <span class="result-badge" id="stamp">측정완료</span>
+      <h2 class="result-title" id="resultTitle"></h2>
+      <p class="result-subtitle" id="resultSubtitle"></p>
+      <p class="result-desc" id="resultDesc"></p>
+
+      <div class="share-block">
+        <div class="share-actions">
+          <button class="share-btn" id="shareBtn" type="button">결과 공유하기</button>
+          <button class="copy-btn" id="copyBtn" type="button">링크 복사</button>
+        </div>
+        <input class="share-link" id="shareLink" type="text" readonly aria-label="결과 공유 링크">
+      </div>
+
+      <div class="stat-block">
+        <p class="stat-title">답변 성향 분포</p>
+        <div class="bonus-row" id="bonusRow">
+          <span class="bonus-icon">✨</span>
+          <span id="bonusText">찡찡보스 (전 문항 에겐 선택 시 등장)</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">에겐</span>
+          <div class="stat-track"><div class="stat-fill e" id="barE"></div></div>
+          <span class="stat-count" id="countE">0</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">밸런스</span>
+          <div class="stat-track"><div class="stat-fill b" id="barB"></div></div>
+          <span class="stat-count" id="countB">0</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">테토</span>
+          <div class="stat-track"><div class="stat-fill t" id="barT"></div></div>
+          <span class="stat-count" id="countT">0</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">야만인</span>
+          <div class="stat-track"><div class="stat-fill y" id="barY"></div></div>
+          <span class="stat-count" id="countY">0</span>
+        </div>
+      </div>
+
+      <details class="recap">
+        <summary>내가 뭐라고 답했는지 다시 보기</summary>
+        <ul class="recap-list" id="recapList"></ul>
+      </details>
+
+      <button class="retry-btn" id="retryBtn">다시 테스트하기</button>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  const questions = [
+    { cat:"식사", text:"밥 먹을 때", options:[
+      { t:"수저 각 맞춰서 얌전히 먹음", k:"e" },
+      { t:"그냥 있는 젓가락으로 대충 먹음", k:"b" },
+      { t:"나뭇가지 꺾어서 젓가락처럼 씀", k:"t" },
+      { t:"그냥 손으로 집어 먹음", k:"y" } ]},
+    { cat:"냉난방", text:"샤워하고 냉난방 켤 때", options:[
+      { t:"여름엔 시원하게 겨울엔 따뜻하게 칼같이 맞춤", k:"e" },
+      { t:"너무 덥거나 추울 때만 잠깐 켬", k:"b" },
+      { t:"겨울엔 찬물, 여름엔 끓는 물로 샤워함, 에어컨·히터는 안 틈", k:"t" },
+      { t:"온도라는 개념 자체가 없음", k:"y" } ]},
+    { cat:"감정", text:"화가 머리끝까지 났을 때", options:[
+      { t:"말없이 눈물부터 그렁그렁", k:"e" },
+      { t:"속으로 삭이다가 나중에 친구한테 털어놓음", k:"b" },
+      { t:"\"됐고, 나와\" 한마디로 바로 담판", k:"t" },
+      { t:"가슴을 두드리며 포효함", k:"y" } ]},
+    { cat:"결제", text:"물건값 치를 때", options:[
+      { t:"삼성페이 등 간편결제만 씀", k:"e" },
+      { t:"카드든 현금이든 그때그때 씀", k:"b" },
+      { t:"카드 안 쓰고 현금만 챙겨 다님", k:"t" },
+      { t:"돌멩이랑 조개껍데기로 물물교환함", k:"y" } ]},
+    { cat:"헤어", text:"머리 손질할 때", options:[
+      { t:"미용실 예약해서 유행 스타일로 세팅함", k:"e" },
+      { t:"그냥 단골집 가서 다듬는 정도", k:"b" },
+      { t:"거울도 안 보고 스스로 밀어버림, 3cm 이하 유지", k:"t" },
+      { t:"손질이라는 개념 자체가 없음", k:"y" } ]},
+    { cat:"잠", text:"잠잘 때", options:[
+      { t:"이불 각 맞추고 푹신한 베개 벰", k:"e" },
+      { t:"베개는 챙기지만 이불 각까진 신경 안 씀", k:"b" },
+      { t:"피곤하면 그 자리에 누움, 베개는 벽돌도 상관없음", k:"t" },
+      { t:"동굴 한 켠에 웅크려 잠듦", k:"y" } ]},
+    { cat:"폰", text:"핸드폰 쓸 때", options:[
+      { t:"케이스에 강화필름까지 씌워서 애지중지함", k:"e" },
+      { t:"케이스 정도만 씌우고 막 씀", k:"b" },
+      { t:"문자 대신 전화만 함, 액정 나가도 그냥 씀", k:"t" },
+      { t:"핸드폰이 뭔지 모름", k:"y" } ]},
+    { cat:"소지품", text:"외출할 때", options:[
+      { t:"가방·지갑은 브랜드를 꼭 따짐", k:"e" },
+      { t:"그냥 필요한 것만 대충 챙겨 나감", k:"b" },
+      { t:"가방이고 지갑이고 그냥 안 챙김", k:"t" },
+      { t:"화폐라는 개념 자체를 모름", k:"y" } ]},
+    { cat:"옷차림", text:"옷 고를 때", options:[
+      { t:"집에서 입는 잠옷·실내복이 따로 있음", k:"e" },
+      { t:"그날 날씨 보고 무난하게 입음", k:"b" },
+      { t:"집에선 팬티 하나로 통일, 나갈 땐 손에 잡히는 대로", k:"t" },
+      { t:"나뭇잎이나 동물 가죽 두름", k:"y" } ]},
+    { cat:"기기", text:"컴퓨터 끌 때", options:[
+      { t:"정상적으로 종료 버튼 눌러서 끔", k:"e" },
+      { t:"쓰던 프로그램만 닫고 화면만 끔", k:"b" },
+      { t:"그냥 전원 코드를 확 뽑아버림", k:"t" },
+      { t:"전기가 뭔지 모름, 애초에 컴퓨터가 없음", k:"y" } ]}
+  ];
+
+  const results = {
+    australo:{
+      color:"var(--yaman)", stamp:"측정불가",
+      title:"오스트랄로피테쿠스", subtitle:"축하합니다, 아직 인간이 아님",
+      desc:"식사는 맨손, 냉난방은 개념 없음, 컴퓨터도 없음. 에겐도 테토도 아닌 순수 원시인 타입입니다. 검사지 말고 화석 감정 의뢰가 필요할지도 모르겠네요. 그래도 생존력 하나는 인류 최강일 겁니다."
+    },
+    neander:{
+      color:"var(--yaman)", stamp:"측정완료",
+      title:"네안데르탈인", subtitle:"직립보행은 O, 문명생활은 세모",
+      desc:"인간과 야생 사이 어딘가에 걸쳐 있는 타입. 가끔은 베개보다 벽돌이, 침대보다 동굴이 더 편하게 느껴집니다. 문명의 이기를 쓸 줄은 알지만 본능이 앞서는 순간이 훨씬 많은 편이죠."
+    },
+    teto:{
+      color:"var(--teto)", stamp:"측정완료",
+      title:"테토형 인간", subtitle:"직진밖에 모르는 상남자·상여자",
+      desc:"고민은 짧게, 행동은 빠르게. 카드 없이 현금만, 컴퓨터는 코드 뽑아서 끕니다. 돌려 말하는 법이 없고 다소 무뚝뚝해 보여도 뒤끝은 의외로 제일 없는 편입니다."
+    },
+    balance:{
+      color:"var(--accent)", stamp:"측정완료",
+      title:"에겐-테토 밸런스형", subtitle:"부드러움과 상남자력을 오가는 만능형",
+      desc:"필요할 땐 한없이 다정하고, 결단이 필요할 땐 누구보다 단호합니다. 상황 따라 스위치를 바꿔 끼우는 타입이라 어느 무리에서든 무난히 잘 섞입니다."
+    },
+    egen:{
+      color:"var(--egen)", stamp:"측정완료",
+      title:"에겐형 인간", subtitle:"섬세함 그 자체, 감성 부자",
+      desc:"실내복은 따로 있고, 결제는 간편결제만, 화나면 말보다 눈물이 먼저입니다. 작은 것 하나에도 마음이 움직이는 타입입니다. 다정함이 무기지만, 가끔은 그 다정함 때문에 손해도 봅니다."
+    },
+    transcend:{
+      color:"var(--egen)", stamp:"측정과부하",
+      title:"찡찡보스", subtitle:"감성은 최강, 근데 옆사람은 좀 피곤함",
+      desc:"말 한마디에 삐지고, 삐졌다고 카톡 씹고, 씹었다고 또 서운해합니다. 본인은 다정한 거라고 생각하지만 주변은 이미 눈치게임 중입니다. 축하합니다, 인류 최초의 감성 갑질러입니다."
+    }
+  };
+
+  let idx = 0;
+  const answers = [];
+
+  const quizView = document.getElementById('quizView');
+  const resultView = document.getElementById('resultView');
+  const qCounter = document.getElementById('qCounter');
+  const progressFill = document.getElementById('progressFill');
+  const categoryTag = document.getElementById('categoryTag');
+  const questionText = document.getElementById('questionText');
+  const optionsList = document.getElementById('optionsList');
+
+  function renderQuestion(){
+    const q = questions[idx];
+    qCounter.textContent = 'Q' + (idx+1) + ' / ' + questions.length;
+    progressFill.style.width = Math.round((idx/questions.length)*100) + '%';
+    categoryTag.textContent = q.cat;
+    questionText.textContent = q.text;
+    optionsList.innerHTML = '';
+    q.options.forEach(function(opt){
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.type = 'button';
+      btn.textContent = opt.t;
+      btn.addEventListener('click', function(){ choose(opt); });
+      optionsList.appendChild(btn);
+    });
+    quizView.classList.remove('fade');
+    void quizView.offsetWidth;
+    quizView.classList.add('fade');
+  }
+
+  function choose(opt){
+    answers.push({ q: questions[idx].text, a: opt.t, k: opt.k });
+    idx++;
+    if (idx >= questions.length){
+      progressFill.style.width = '100%';
+      showResult();
+    } else {
+      renderQuestion();
+    }
+  }
+
+  function encodeAnswers(list){
+    return list.map(function(a){ return a.k; }).join('');
+  }
+
+  function decodeAnswers(code){
+    if (!code || code.length !== questions.length) return null;
+    const list = [];
+    for (let i = 0; i < questions.length; i++){
+      const q = questions[i];
+      const opt = q.options.find(function(o){ return o.k === code[i]; });
+      if (!opt) return null;
+      list.push({ q: q.text, a: opt.t, k: opt.k });
+    }
+    return list;
+  }
+
+  function computeResult(){
+    const counts = { e:0, b:0, t:0, y:0 };
+    answers.forEach(function(a){ counts[a.k]++; });
+    const total = answers.length;
+    const effE = counts.e + counts.b / 2;
+    const effT = counts.t + counts.b / 2;
+    let key;
+    if (counts.y === total) key = 'australo';
+    else if (counts.e === total) key = 'transcend';
+    else if (counts.y > effE && counts.y > effT) key = 'neander';
+    else if (effE === effT) key = 'balance';
+    else if (effE > effT) key = 'egen';
+    else key = 'teto';
+    return { key: key, counts: counts, total: total };
+  }
+
+  function showResult(){
+    const r = computeResult();
+    const info = results[r.key];
+
+    document.getElementById('card').style.setProperty('--result-color', info.color);
+    document.getElementById('stamp').innerHTML = info.stamp;
+    document.getElementById('resultTitle').textContent = info.title;
+    document.getElementById('resultSubtitle').textContent = info.subtitle;
+    document.getElementById('resultDesc').textContent = info.desc;
+
+    const bonusRow = document.getElementById('bonusRow');
+    const bonusText = document.getElementById('bonusText');
+    if (r.key === 'transcend'){
+      bonusRow.classList.add('achieved');
+      bonusText.textContent = '찡찡보스 달성! 전 문항 에겐 선택';
+    } else {
+      bonusRow.classList.remove('achieved');
+      bonusText.textContent = '찡찡보스 (전 문항 에겐 선택 시 등장)';
+    }
+
+    const shareUrl = window.location.origin + window.location.pathname + '?a=' + encodeAnswers(answers);
+    document.getElementById('shareLink').value = shareUrl;
+
+    const pct = function(n){ return r.total ? Math.round((n/r.total)*100) : 0; };
+    document.getElementById('barE').style.width = pct(r.counts.e) + '%';
+    document.getElementById('barB').style.width = pct(r.counts.b) + '%';
+    document.getElementById('barT').style.width = pct(r.counts.t) + '%';
+    document.getElementById('barY').style.width = pct(r.counts.y) + '%';
+    document.getElementById('countE').textContent = r.counts.e;
+    document.getElementById('countB').textContent = r.counts.b;
+    document.getElementById('countT').textContent = r.counts.t;
+    document.getElementById('countY').textContent = r.counts.y;
+
+    const recapList = document.getElementById('recapList');
+    recapList.innerHTML = '';
+    answers.forEach(function(a){
+      const li = document.createElement('li');
+      const dot = document.createElement('span');
+      dot.className = 'recap-dot ' + a.k;
+      const text = document.createElement('span');
+      text.innerHTML = '<span class="recap-q">' + a.q + '</span><br>' + a.a;
+      li.appendChild(dot);
+      li.appendChild(text);
+      recapList.appendChild(li);
+    });
+
+    quizView.hidden = true;
+    resultView.hidden = false;
+    resultView.classList.remove('fade');
+    void resultView.offsetWidth;
+    resultView.classList.add('fade');
+  }
+
+  document.getElementById('retryBtn').addEventListener('click', function(){
+    idx = 0;
+    answers.length = 0;
+    window.history.replaceState(null, '', window.location.pathname);
+    resultView.hidden = true;
+    quizView.hidden = false;
+    renderQuestion();
+  });
+
+  function flashButton(btn, tempLabel){
+    const original = btn.textContent;
+    btn.textContent = tempLabel;
+    btn.disabled = true;
+    setTimeout(function(){ btn.textContent = original; btn.disabled = false; }, 1500);
+  }
+
+  function copyShareLink(){
+    const input = document.getElementById('shareLink');
+    input.select();
+    input.setSelectionRange(0, 99999);
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      return navigator.clipboard.writeText(input.value).catch(function(){
+        try { document.execCommand('copy'); } catch(e){}
+      });
+    }
+    try { document.execCommand('copy'); } catch(e){}
+    return Promise.resolve();
+  }
+
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    const btn = this;
+    copyShareLink().then(function(){ flashButton(btn, '복사됨!'); });
+  });
+
+  document.getElementById('shareBtn').addEventListener('click', function(){
+    const btn = this;
+    const url = document.getElementById('shareLink').value;
+    const title = document.getElementById('resultTitle').textContent;
+    if (navigator.share){
+      navigator.share({ title: '에겐테토 테스트 결과: ' + title, text: '내 결과는 "' + title + '"! 너도 해봐', url: url }).catch(function(err){
+        if (err && err.name === 'AbortError') return;
+        copyShareLink().then(function(){ flashButton(btn, '링크 복사됨!'); });
+      });
+    } else {
+      copyShareLink().then(function(){ flashButton(btn, '링크 복사됨!'); });
+    }
+  });
+
+  const sharedAnswers = decodeAnswers(new URLSearchParams(window.location.search).get('a'));
+  if (sharedAnswers){
+    answers.length = 0;
+    sharedAnswers.forEach(function(a){ answers.push(a); });
+    idx = questions.length;
+    showResult();
+  } else {
+    renderQuestion();
+  }
+})();
+</script>
