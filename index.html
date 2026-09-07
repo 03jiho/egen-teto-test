@@ -503,11 +503,6 @@
       title:"오스트랄로피테쿠스", subtitle:"축하합니다, 아직 인간이 아님",
       desc:"식사는 맨손, 냉난방은 개념 없음, 컴퓨터도 없음. 에겐도 테토도 아닌 순수 원시인 타입입니다. 검사지 말고 화석 감정 의뢰가 필요할지도 모르겠네요. 그래도 생존력 하나는 인류 최강일 겁니다."
     },
-    neander:{
-      color:"var(--yaman)", stamp:"측정완료",
-      title:"네안데르탈인", subtitle:"직립보행은 O, 문명생활은 세모",
-      desc:"인간과 야생 사이 어딘가에 걸쳐 있는 타입. 가끔은 베개보다 벽돌이, 침대보다 동굴이 더 편하게 느껴집니다. 문명의 이기를 쓸 줄은 알지만 본능이 앞서는 순간이 훨씬 많은 편이죠."
-    },
     teto:{
       color:"var(--teto)", stamp:"측정완료",
       title:"테토형 인간", subtitle:"직진밖에 모르는 상남자·상여자",
@@ -597,7 +592,6 @@
     let key;
     if (counts.y === total) key = 'australo';
     else if (counts.e === total) key = 'transcend';
-    else if (counts.y > effE && counts.y > effT) key = 'neander';
     else if (effE === effT) key = 'balance';
     else if (effE > effT) key = 'egen';
     else key = 'teto';
