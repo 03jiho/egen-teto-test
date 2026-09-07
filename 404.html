@@ -575,8 +575,44 @@
     }
   }
 
-  // 결과 유형만 담는 짧은 공유 링크(예: .../teto)를 위한 대표 답변 분포.
-  // 실제 질문에 답하지 않고도 결과 화면을 그대로 재현할 수 있게 해준다.
+  // 공유 링크는 .../egen-teto-test/teto.eebbttyy 형태로 만든다.
+  // 앞부분(결과 유형)은 가독성을 위한 장식이고, "." 뒤의 코드가 실제
+  // 답변을 문항 순서대로 정확히 담고 있어 그 사람의 결과를 그대로 재현한다.
+  const RESULT_KEYS = Object.keys(results);
+
+  function encodeAnswers(list){
+    return list.map(function(a){ return a.k; }).join('');
+  }
+
+  function decodeAnswers(code){
+    if (!code || code.length !== questions.length) return null;
+    const list = [];
+    for (let i = 0; i < questions.length; i++){
+      const q = questions[i];
+      const opt = q.options.find(function(o){ return o.k === code[i]; });
+      if (!opt) return null;
+      list.push({ q: q.text, a: opt.t, k: opt.k });
+    }
+    return list;
+  }
+
+  function isResultSegment(seg){
+    return !!seg && (seg === 'index.html' || seg.indexOf('.') !== -1 || RESULT_KEYS.indexOf(seg) !== -1);
+  }
+
+  function getBasePath(){
+    const segs = window.location.pathname.split('/').filter(function(s){ return s.length > 0; });
+    const last = segs[segs.length-1];
+    if (isResultSegment(last)) segs.pop();
+    return '/' + segs.join('/') + (segs.length ? '/' : '');
+  }
+
+  function buildResultUrl(key, list){
+    const code = list ? encodeAnswers(list) : '';
+    return window.location.origin + getBasePath() + key + (code ? ('.' + code) : '');
+  }
+
+  // 이전에 배포됐던, 정확한 코드가 없는 슬러그 전용 링크를 위한 대표 답변 분포
   const REP_COUNTS = {
     australo:  { e:0, b:0, t:0, y:questions.length },
     transcend: { e:questions.length, b:0, t:0, y:0 },
@@ -584,23 +620,20 @@
     egen:      { e:questions.length-2, b:2, t:0, y:0 },
     balance:   { e:Math.floor(questions.length/2), b:0, t:Math.ceil(questions.length/2), y:0 }
   };
-  const RESULT_KEYS = Object.keys(results);
 
-  function getSlugFromPath(){
+  function parseSharedPath(){
     const segs = window.location.pathname.split('/').filter(function(s){ return s.length > 0; });
     const last = segs[segs.length-1];
-    return (last && last !== 'index.html') ? last : null;
+    if (!last || last === 'index.html') return null;
+    const dot = last.indexOf('.');
+    if (dot === -1) return null; // 슬러그만 있는 이전 링크는 아래 하위호환 분기에서 처리
+    return decodeAnswers(last.slice(dot+1));
   }
 
-  function getBasePath(){
+  function getBareSlugFromPath(){
     const segs = window.location.pathname.split('/').filter(function(s){ return s.length > 0; });
     const last = segs[segs.length-1];
-    if (last === 'index.html' || RESULT_KEYS.indexOf(last) !== -1) segs.pop();
-    return '/' + segs.join('/') + (segs.length ? '/' : '');
-  }
-
-  function buildResultUrl(key){
-    return window.location.origin + getBasePath() + key;
+    return (last && last.indexOf('.') === -1 && results[last]) ? last : null;
   }
 
   function computeResult(){
@@ -637,7 +670,7 @@
       bonusText.textContent = '전 문항 에겐 또는 야만인 선택 시 히든 결과 등장';
     }
 
-    document.getElementById('shareLink').value = buildResultUrl(key);
+    document.getElementById('shareLink').value = buildResultUrl(key, isSharedPreview ? null : answers);
 
     const pct = function(n){ return total ? Math.round((n/total)*100) : 0; };
     document.getElementById('barE').style.width = pct(counts.e) + '%';
@@ -754,10 +787,16 @@
     }
   });
 
-  const sharedSlug = getSlugFromPath();
-  if (sharedSlug && results[sharedSlug]){
+  const sharedExact = parseSharedPath();
+  const sharedBareSlug = getBareSlugFromPath();
+  if (sharedExact){
+    answers.length = 0;
+    sharedExact.forEach(function(a){ answers.push(a); });
     idx = questions.length;
-    showSharedResult(sharedSlug);
+    showResult();
+  } else if (sharedBareSlug){
+    idx = questions.length;
+    showSharedResult(sharedBareSlug);
   } else {
     renderQuestion();
   }
