@@ -319,9 +319,9 @@
   }
   .bonus-row.achieved{
     border-style:solid;
-    border-color:var(--egen);
-    background:var(--egen-soft);
-    color:var(--egen);
+    border-color:var(--result-color, var(--egen));
+    background:var(--surface-2);
+    color:var(--result-color, var(--egen));
     font-weight:700;
   }
   .bonus-icon{ flex:none; }
@@ -415,7 +415,7 @@
         <p class="stat-title">답변 성향 분포</p>
         <div class="bonus-row" id="bonusRow">
           <span class="bonus-icon">✨</span>
-          <span id="bonusText">전 문항 에겐 선택 시 히든 결과 등장</span>
+          <span id="bonusText">전 문항 에겐 또는 야만인 선택 시 히든 결과 등장</span>
         </div>
         <div class="stat-row">
           <span class="stat-label">에겐</span>
@@ -617,12 +617,12 @@
 
     const bonusRow = document.getElementById('bonusRow');
     const bonusText = document.getElementById('bonusText');
-    if (r.key === 'transcend'){
+    if (r.key === 'transcend' || r.key === 'australo'){
       bonusRow.classList.add('achieved');
       bonusText.textContent = '히든 결과 달성: ' + info.title;
     } else {
       bonusRow.classList.remove('achieved');
-      bonusText.textContent = '전 문항 에겐 선택 시 히든 결과 등장';
+      bonusText.textContent = '전 문항 에겐 또는 야만인 선택 시 히든 결과 등장';
     }
 
     const shareUrl = window.location.origin + window.location.pathname + '?a=' + encodeAnswers(answers);
